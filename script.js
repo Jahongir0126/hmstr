@@ -163,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const keys = await Promise.all(
       Array.from({ length: keyCount }, generateKeyProcess)
     );
-    console.log(keys);
 
     if (keys.length > 0) {
       keysList.innerHTML = keys
@@ -179,11 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
       copyAllBtn.classList.remove("hidden");
       copyAllBtn.style.display = "block";
 
-      // Send generated keys to Telegram
-    //   await sendToTelegram(keys);
-    console.log(keys,"asdasdas");
-    
-    //   alert("Generate and Send successfull");
+    //   Send generated keys to Telegram
+      await sendMessages(keys);
+      alert("Generate and Send successfull");
     }
 
     keyContainer.classList.remove("hidden");
@@ -224,6 +221,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // Telegramga jonatish
 
   // Function to send message to Telegram
+//   async function sendToTelegram(message) {
+//     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         chat_id: CHAT_ID,
+//         text: message,
+//       }),
+//     });
+
+//     const data = await response.json();
+//     if (!response.ok) {
+//       console.log(data.description);
+
+//       throw new Error(data.description || "Failed to send message to Telegram");
+//     }
+//   }
+  //
   async function sendToTelegram(message) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const response = await fetch(url, {
@@ -232,17 +248,34 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({
         chat_id: CHAT_ID,
         text: message,
+        parse_mode: 'MarkdownV2', // Используем MarkdownV2 для форматирования
       }),
     });
 
     const data = await response.json();
     if (!response.ok) {
       console.log(data.description);
-
       throw new Error(data.description || "Failed to send message to Telegram");
     }
-  }
-  //
+    return data;
+}
+
+async function sendMessages(keys) {
+    for (const key of keys) {
+        // Форматируем сообщение, добавляя тройные обратные кавычки
+        const formattedMessage = `\`\`\`\n${key}\n\`\`\``;
+        try {
+            await sendToTelegram(formattedMessage);
+            console.log(`Sent: ${key}`);
+        } catch (error) {
+            console.error(`Failed to send: ${key}`);
+        }
+    }
+}
+
+
+
+
   const generateClientId = () => {
     const timestamp = Date.now();
     const randomNumbers = Array.from({ length: 19 }, () =>
